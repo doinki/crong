@@ -1,6 +1,7 @@
 import { invariantResponse } from '@mado/invariant';
 import { data } from 'react-router';
 
+import { Pagination } from '~/components/ui/pagination';
 import { prisma } from '~/prisma.server';
 import { joinChildren } from '~/utils/join-children';
 
@@ -14,6 +15,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   });
 
   context.timing.startTime(context.c, 'prisma');
+  const count = Math.ceil((await prisma.post.count()) / 20);
   const posts = await prisma.post.findMany({
     orderBy: { publishedAt: 'desc' },
     skip: (page - 1) * 20,
@@ -22,14 +24,16 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   context.timing.endTime(context.c, 'prisma');
 
   return data(
-    { posts },
+    { count, page, posts },
     { headers: { 'Cache-Control': 'public, max-age=300' } },
   );
 }
 
-export default function Route({ loaderData: { posts } }: Route.ComponentProps) {
+export default function Route({
+  loaderData: { count, page, posts },
+}: Route.ComponentProps) {
   return (
-    <main className="mx-auto max-w-4xl px-5 md:px-7">
+    <main className="mx-auto max-w-4xl space-y-16 px-5 md:px-7">
       <ul className="space-y-6 md:space-y-8">
         {joinChildren(
           posts.map((item, index) => (
@@ -75,6 +79,8 @@ export default function Route({ loaderData: { posts } }: Route.ComponentProps) {
           </li>,
         )}
       </ul>
+
+      <Pagination count={count} page={page} />
     </main>
   );
 }
