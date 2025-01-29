@@ -14,14 +14,18 @@ export async function loader({ context, params }: Route.LoaderArgs) {
     status: 400,
   });
 
-  context.timing.startTime(context.c, 'prisma');
-  const count = Math.ceil((await prisma.post.count()) / 20);
-  const posts = await prisma.post.findMany({
-    orderBy: { publishedAt: 'desc' },
-    skip: (page - 1) * 20,
-    take: 20,
-  });
-  context.timing.endTime(context.c, 'prisma');
+  context.timing.startTime(context.c, 'getPosts');
+  const [posts, count] = await Promise.all([
+    prisma.post.findMany({
+      orderBy: { publishedAt: 'desc' },
+      skip: (page - 1) * 20,
+      take: 20,
+    }),
+    prisma.post.count().then((count) => Math.ceil(count / 20)),
+  ]);
+  context.timing.endTime(context.c, 'getPosts');
+
+  invariantResponse(page <= count, 'Not found', { status: 404 });
 
   return data(
     { count, page, posts },
