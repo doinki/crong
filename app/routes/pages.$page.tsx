@@ -9,8 +9,8 @@ import { joinChildren } from '~/utils/join-children';
 
 import { type Route } from './+types/pages.$page';
 
-export const handle: SeoHandle = {
-  seo: serverOnly$({
+export const handle: SeoHandle | undefined = serverOnly$({
+  seo: {
     generateSitemapEntries: async () => {
       const count = await prisma.post
         .count()
@@ -20,8 +20,8 @@ export const handle: SeoHandle = {
         path: `/pages/${index + 1}`,
       }));
     },
-  }),
-};
+  },
+});
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const page = Number(params.page);
