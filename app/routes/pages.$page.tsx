@@ -68,12 +68,6 @@ export default function Route({
                 </p>
                 <footer className="flex flex-wrap items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                   <cite>{item.source}</cite>
-                  <span>-</span>
-                  <div className="flex gap-1 italic">
-                    {item.authors.map((author, i) => (
-                      <span key={i}>{author}</span>
-                    ))}
-                  </div>
                 </footer>
               </article>
             </li>
