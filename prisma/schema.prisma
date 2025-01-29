@@ -18,7 +18,7 @@ model Post {
   summary     String
   tags        String[]
   title       String
-  url         String
+  url         String   @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
