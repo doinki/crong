@@ -42,8 +42,8 @@ importers:
         specifier: ^4.6.19
         version: 4.6.19
       isbot:
-        specifier: ^5.1.21
-        version: 5.1.21
+        specifier: ^5.1.22
+        version: 5.1.22
       openai:
         specifier: ^4.80.1
         version: 4.80.1(zod@3.24.1)
@@ -60,8 +60,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(hono@4.6.19)(react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       react-router-seo:
-        specifier: ^0.0.2
-        version: 0.0.2(react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+        specifier: ^0.1.1
+        version: 0.1.1(react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       server.close:
         specifier: ^0.0.2
         version: 0.0.2
@@ -168,6 +168,9 @@ importers:
       vite:
         specifier: ^6.0.11
         version: 6.0.11(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0)
+      vite-env-only:
+        specifier: ^3.0.3
+        version: 3.0.3(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0))
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.7.3)(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0))
@@ -1272,8 +1275,8 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  caniuse-lite@1.0.30001695:
-    resolution: {integrity: sha512-vHyLade6wTgI2u1ec3WQBxv+2BrTERV28UXQu9LO6lZ9pYeMk34vjXFLOxo1A4UBA8XTL4njRQZdno/yYaSmWw==}
+  caniuse-lite@1.0.30001696:
+    resolution: {integrity: sha512-pDCPkvzfa39ehJtJ+OwGT/2yvT2SbjfHhiIW2LWOAcMQ7BzwxT/XuyUp4OTOd0XFWA6BKw0JalnBHgSi5DGJBQ==}
 
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -2029,8 +2032,8 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
-  isbot@5.1.21:
-    resolution: {integrity: sha512-0q3naRVpENL0ReKHeNcwn/G7BDynp0DqZUckKyFtM9+hmpnPqgm8+8wbjiVZ0XNhq1wPQV28/Pb8Snh5adeUHA==}
+  isbot@5.1.22:
+    resolution: {integrity: sha512-RqCFY3cJy3c2y1I+rMn81cfzAR4XJwfPBC+M8kffUjbPzxApzyyv7Tbm1C/gXXq2dSCuD238pKFEWlQMTWsTFw==}
     engines: {node: '>=18'}
 
   isexe@2.0.0:
@@ -2585,8 +2588,8 @@ packages:
       hono: ^4.0.0
       react-router: ^7.0.0
 
-  react-router-seo@0.0.2:
-    resolution: {integrity: sha512-OR08j1KJs5DYaoVIQdgFAI7VZEcp8DfEi/pi4ISZCg0ZM4Jhtl7/GeYd2SNWXVIewovclIxa2+RDUfqX64LN+w==}
+  react-router-seo@0.1.1:
+    resolution: {integrity: sha512-gKcitKzvUqwfZYct/6TE1ypitj56UAzoM++RerYfO9jrQW1jbe3Et33waJg5APEoy5JMvKWkQ1IxMgmv8O+Wgw==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react-router: ^7.0.0
@@ -3004,6 +3007,11 @@ packages:
   validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+
+  vite-env-only@3.0.3:
+    resolution: {integrity: sha512-iAb7cTXRrvFShaF1n+G8f6Yqq7sRJcxipNYNQQu0DN5N9P55vJMmLG5lNU5moYGpd+ZH1WhBHdkWi5WjrfImHg==}
+    peerDependencies:
+      vite: '*'
 
   vite-node@3.0.0-beta.2:
     resolution: {integrity: sha512-ofTf6cfRdL30Wbl9n/BX81EyIR5s4PReLmSurrxQ+koLaWUNOEo8E0lCM53OJkb8vpa2URM2nSrxZsIFyvY1rg==}
@@ -4161,7 +4169,7 @@ snapshots:
 
   browserslist@4.24.4:
     dependencies:
-      caniuse-lite: 1.0.30001695
+      caniuse-lite: 1.0.30001696
       electron-to-chromium: 1.5.88
       node-releases: 2.0.19
       update-browserslist-db: 1.1.2(browserslist@4.24.4)
@@ -4191,7 +4199,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  caniuse-lite@1.0.30001695: {}
+  caniuse-lite@1.0.30001696: {}
 
   chalk@4.1.2:
     dependencies:
@@ -5150,7 +5158,7 @@ snapshots:
 
   isarray@2.0.5: {}
 
-  isbot@5.1.21: {}
+  isbot@5.1.22: {}
 
   isexe@2.0.0: {}
 
@@ -5605,7 +5613,7 @@ snapshots:
       hono: 4.6.19
       react-router: 7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  react-router-seo@0.0.2(react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)):
+  react-router-seo@0.1.1(react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)):
     dependencies:
       react-router: 7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
@@ -6086,6 +6094,19 @@ snapshots:
       spdx-expression-parse: 3.0.1
 
   validate-npm-package-name@5.0.1: {}
+
+  vite-env-only@3.0.3(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0)):
+    dependencies:
+      '@babel/core': 7.26.7
+      '@babel/generator': 7.26.5
+      '@babel/parser': 7.26.7
+      '@babel/traverse': 7.26.7
+      '@babel/types': 7.26.7
+      babel-dead-code-elimination: 1.0.8
+      micromatch: 4.0.8
+      vite: 6.0.11(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0)
+    transitivePeerDependencies:
+      - supports-color
 
   vite-node@3.0.0-beta.2(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0):
     dependencies:

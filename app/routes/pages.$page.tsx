@@ -1,11 +1,27 @@
 import { invariantResponse } from '@mado/invariant';
 import { data } from 'react-router';
+import { SeoHandle } from 'react-router-seo';
+import { serverOnly$ } from 'vite-env-only/macros';
 
 import { Pagination } from '~/components/ui/pagination';
 import { prisma } from '~/prisma.server';
 import { joinChildren } from '~/utils/join-children';
 
 import { type Route } from './+types/pages.$page';
+
+export const handle: SeoHandle = {
+  seo: serverOnly$({
+    generateSitemapEntries: async () => {
+      const count = await prisma.post
+        .count()
+        .then((count) => Math.ceil(count / 20));
+
+      return Array.from({ length: count }, (_, index) => ({
+        path: `/pages/${index + 1}`,
+      }));
+    },
+  }),
+};
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const page = Number(params.page);
