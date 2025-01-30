@@ -16,7 +16,9 @@ export function Pagination({ count, page }: PaginationProps) {
     <nav className="flex justify-center gap-1 md:gap-2">
       <Link
         aria-disabled={isFirstPageGroup}
-        aria-label="이전 페이지"
+        aria-label={['이전 페이지', !isFirstPageGroup && `${start - 1} 페이지`]
+          .filter(Boolean)
+          .join('')}
         className={twJoin(
           'inline-flex size-8 items-center justify-center border md:size-10',
           isFirstPageGroup && 'pointer-events-none opacity-16',
@@ -38,7 +40,7 @@ export function Pagination({ count, page }: PaginationProps) {
               pageNumber === page && '(현재 페이지)',
             ]
               .filter(Boolean)
-              .join(' ')}
+              .join('')}
             className={twJoin(
               'inline-flex size-8 items-center justify-center border md:size-10',
               pageNumber === page && 'bg-zinc-200 dark:bg-zinc-700',
@@ -52,7 +54,9 @@ export function Pagination({ count, page }: PaginationProps) {
 
       <Link
         aria-disabled={isLastPageGroup}
-        aria-label="다음 페이지"
+        aria-label={[`다음 페이지`, !isLastPageGroup && `(${end + 1} 페이지)`]
+          .filter(Boolean)
+          .join('')}
         className={twJoin(
           'inline-flex size-8 items-center justify-center border md:size-10',
           isLastPageGroup && 'pointer-events-none opacity-16',
