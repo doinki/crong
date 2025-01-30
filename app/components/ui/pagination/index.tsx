@@ -10,7 +10,7 @@ export function Pagination({ count, page }: PaginationProps) {
   const start = Math.floor((page - 1) / 5) * 5 + 1;
   const end = Math.min(start + 4, count);
   const isFirstPageGroup = page <= 5;
-  const isLastPageGroup = start + 5 >= count;
+  const isLastPageGroup = start + 4 >= count;
 
   return (
     <nav className="flex justify-center gap-1 md:gap-2">
