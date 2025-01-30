@@ -54,6 +54,7 @@ export default function Route({
 }: Route.ComponentProps) {
   return (
     <main className="mx-auto max-w-4xl space-y-16 px-5 md:px-7">
+      <h1 className="sr-only">Crong</h1>
       <ul className="space-y-6 md:space-y-8">
         {joinChildren(
           posts.map((item, index) => (
