@@ -20,6 +20,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link href={font} rel="stylesheet" />
         <Meta />
         <Links />
+        {import.meta.env.PROD && (
+          <>
+            <script
+              src="https://www.googletagmanager.com/gtag/js?id=G-B1HVKNYX24"
+              async
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html:
+                  'function gtag(){dataLayer.push(arguments)}globalThis.dataLayer=globalThis.dataLayer||[],gtag("js",new Date),gtag("config","G-B1HVKNYX24");',
+              }}
+            />
+          </>
+        )}
         <ThemeScript />
       </head>
       <body>
