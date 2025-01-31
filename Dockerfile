@@ -11,6 +11,7 @@ COPY --from=deps /app/node_modules node_modules
 COPY . .
 RUN corepack enable pnpm && \
     pnpm install --frozen-lockfile --offline && \
+    pnpm prisma generate && \
     pnpm build && \
     pnpm prune --prod
 
