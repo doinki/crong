@@ -6,6 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
+import prismaInstrumentation from '@prisma/instrumentation';
+import { httpIntegration, init, prismaIntegration } from '@sentry/node';
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { endTime, startTime, timing } from 'hono/timing';
@@ -29,6 +32,22 @@ sourceMapSupport.install({
 
     return null;
   },
+});
+
+const { PrismaInstrumentation } = prismaInstrumentation;
+
+init({
+  dsn: process.env.SENTRY_DSN,
+  enabled: process.env.NODE_ENV === 'production',
+  environment: process.env.NODE_ENV,
+  integrations: [
+    prismaIntegration({
+      prismaInstrumentation: new PrismaInstrumentation(),
+    }),
+    httpIntegration(),
+    nodeProfilingIntegration(),
+  ],
+  tracesSampleRate: 1,
 });
 
 const app = new Hono();

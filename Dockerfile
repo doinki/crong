@@ -9,7 +9,17 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules node_modules
 COPY . .
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate && \
+RUN --mount=type=secret,id=SHA \
+    --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+    --mount=type=secret,id=SENTRY_DSN \
+    --mount=type=secret,id=SENTRY_ORG \
+    --mount=type=secret,id=SENTRY_PROJECT \
+    export SHA=$(cat /run/secrets/SHA) && \
+    export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
+    export SENTRY_DSN=$(cat /run/secrets/SENTRY_DSN) && \
+    export SENTRY_ORG=$(cat /run/secrets/SENTRY_ORG) && \
+    export SENTRY_PROJECT=$(cat /run/secrets/SENTRY_PROJECT) && \
+    corepack enable && corepack prepare pnpm@9.15.4 --activate && \
     pnpm install --frozen-lockfile --offline && \
     pnpm prisma generate && \
     pnpm build && \

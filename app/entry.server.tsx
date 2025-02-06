@@ -1,6 +1,7 @@
 import { PassThrough } from 'node:stream';
 
 import { createReadableStreamFromReadable } from '@react-router/node';
+import { captureException } from '@sentry/node';
 import { isbot } from 'isbot';
 import {
   renderToPipeableStream,
@@ -9,6 +10,7 @@ import {
 import {
   type AppLoadContext,
   type EntryContext,
+  HandleErrorFunction,
   ServerRouter,
 } from 'react-router';
 
@@ -47,7 +49,9 @@ export default function handleRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
+            console.group('renderToPipeableStream');
             console.error(error);
+            console.groupEnd();
           }
         },
         onShellError(error: unknown) {
@@ -78,3 +82,13 @@ export default function handleRequest(
     setTimeout(abort, streamTimeout + 1000);
   });
 }
+
+export const handleError: HandleErrorFunction = (error, { request }) => {
+  if (!request.signal.aborted) {
+    captureException(error);
+
+    console.group('handleError');
+    console.error(error);
+    console.groupEnd();
+  }
+};
