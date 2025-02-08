@@ -57,7 +57,11 @@ function removeSourcemap(outDir: string): PluginOption {
         paths.map(async (path) => {
           const extension = extname(path);
 
-          if (extension === '.js' || extension === '.mjs') {
+          if (
+            extension === '.js' ||
+            extension === '.mjs' ||
+            extension === '.cjs'
+          ) {
             return readFile(path, 'utf8').then((code) =>
               writeFile(
                 path,
