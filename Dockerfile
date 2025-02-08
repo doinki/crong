@@ -3,7 +3,7 @@ FROM node:22-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY pnpm-lock.yaml .
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm fetch
+RUN corepack enable && npm i -g corepack && corepack prepare pnpm@latest --activate && pnpm fetch
 
 FROM base AS builder
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN --mount=type=secret,id=SHA \
     export SENTRY_DSN=$(cat /run/secrets/SENTRY_DSN) && \
     export SENTRY_ORG=$(cat /run/secrets/SENTRY_ORG) && \
     export SENTRY_PROJECT=$(cat /run/secrets/SENTRY_PROJECT) && \
-    corepack enable && corepack prepare pnpm@9.15.4 --activate && \
+    corepack enable && npm i -g corepack && corepack prepare pnpm@latest --activate && \
     pnpm install --frozen-lockfile --offline && \
     pnpm prisma generate && \
     pnpm build && \
