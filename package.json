@@ -78,5 +78,15 @@
     "vite": "^6.1.0",
     "vite-env-only": "^3.0.3",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "@sentry/cli",
+      "@sentry/profiling-node",
+      "esbuild",
+      "prisma"
+    ]
   }
 }
