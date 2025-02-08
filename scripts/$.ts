@@ -2,13 +2,76 @@ import 'dotenv/config';
 
 import { PrismaClient } from '@prisma/client';
 import * as cheerio from 'cheerio';
+import OpenAI from 'openai';
 import { filter, from, map, merge, mergeMap } from 'rxjs';
 
 const client = new PrismaClient();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-merge(toss$(), daangn$(), woowahan$(), kerly$(), naver$(), line$()).subscribe(
-  console.log,
-);
+merge(toss$(), daangn$(), woowahan$(), kerly$(), naver$(), line$())
+  .pipe(
+    mergeMap(async (post) => {
+      const response = await openai.chat.completions.create({
+        messages: [
+          {
+            content: [
+              {
+                text: 'You are a helpful assistant that receives HTML text as input and returns a JSON object with the following structure:\n\n{\n  "summary": "string",\n  "tags": ["string"]\n}\n\n# Summary\n- The summary must be written in Korean (formal tone) (e.g., “...입니다.”, “...입습니다.”, “...합니다.”), 3 to 5 lines.\n- Assume the reader is a developer. Keep it concise and clear.\n- Focus on the core message without using explanatory phrases (e.g., “이 글은 …를 설명합니다.”).\nDo not use first-person pronouns (e.g., “나는”, “우리는”, “저희는”).\n\n# Tags\n- Identify up to 3 key IT technologies mentioned in the text.\n- Each tag must be in English, singular form, and lowercase.\n- Use one word for each tag whenever possible.\n- If there are multiple variations of the same technology, unify them under the word that is most relevant to the text.\n\nReturn only valid JSON. No extra text or explanations.',
+                type: 'text',
+              },
+            ],
+            role: 'system',
+          },
+          {
+            content: [
+              {
+                text: ['# ' + post.title, post.content].join('\n'),
+                type: 'text',
+              },
+            ],
+            role: 'user',
+          },
+        ],
+        model: 'gpt-4o-mini',
+        response_format: {
+          type: 'json_object',
+        },
+      });
+
+      const data = JSON.parse(response.choices[0].message.content!) as {
+        summary: string;
+        tags: string[];
+      };
+
+      return {
+        ...post,
+        summary: data.summary,
+        tags: data.tags,
+      };
+    }),
+    mergeMap(async (post) => {
+      await client.post.create({
+        data: {
+          publishedAt: post.publishedAt,
+          source: post.source,
+          summary: post.summary,
+          tags: post.tags,
+          title: post.title,
+          url: post.url,
+        },
+      });
+
+      return post;
+    }),
+  )
+  .subscribe({
+    error: (error) => {
+      console.error(error);
+    },
+    next: (post) => {
+      console.log(post);
+    },
+  });
 
 function toss$() {
   return from(fetchHtml('https://toss.tech/rss.xml')).pipe(
