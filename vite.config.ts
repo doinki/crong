@@ -1,8 +1,12 @@
+import { readFile, unlink, writeFile } from 'node:fs/promises';
+import { extname } from 'node:path';
+
 import devServer, { defaultOptions } from '@hono/vite-dev-server';
 import { reactRouter } from '@react-router/dev/vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'vite';
+import { glob } from 'glob';
+import { defineConfig, PluginOption } from 'vite';
 import { envOnlyMacros } from 'vite-env-only';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -30,9 +34,6 @@ export default defineConfig(({ isSsrBuild }) => {
           release: {
             name: process.env.SHA,
           },
-          sourcemaps: {
-            filesToDeleteAfterUpload: ['./build/**/*.map'],
-          },
         }),
       tailwindcss(),
       reactRouter(),
@@ -41,6 +42,38 @@ export default defineConfig(({ isSsrBuild }) => {
         exclude: [...defaultOptions.exclude, /^\/app\/.*/, /.*\.png$/],
         injectClientScript: false,
       }),
+      removeSourcemap('build'),
     ],
   };
 });
+
+function removeSourcemap(outDir: string): PluginOption {
+  return {
+    apply: 'build',
+    async closeBundle() {
+      const paths = await glob(outDir + '/**/*.@(cjs|js|mjs|map)');
+
+      await Promise.all(
+        paths.map(async (path) => {
+          const extension = extname(path);
+
+          if (extension === '.js' || extension === '.mjs') {
+            return readFile(path, 'utf8').then((code) =>
+              writeFile(
+                path,
+                code
+                  .replaceAll(/^\s*\/\/#\s*sourceMappingURL=.*$/gim, '')
+                  .trimEnd(),
+                'utf8',
+              ),
+            );
+          } else if (extension === '.map') {
+            return unlink(path);
+          }
+        }),
+      );
+    },
+    enforce: 'post',
+    name: 'remove-sourcemap',
+  };
+}
