@@ -47,6 +47,7 @@ init({
     httpIntegration(),
     nodeProfilingIntegration(),
   ],
+  profilesSampleRate: 1,
   tracesSampleRate: 1,
 });
 
