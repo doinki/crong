@@ -34,6 +34,7 @@ export default defineConfig(({ isSsrBuild }) => {
           release: {
             name: process.env.SHA,
           },
+          telemetry: false,
         }),
       tailwindcss(),
       reactRouter(),

@@ -21,7 +21,6 @@ RUN --mount=type=secret,id=SHA \
     export SENTRY_PROJECT=$(cat /run/secrets/SENTRY_PROJECT) && \
     corepack enable && npm i -g corepack && corepack prepare pnpm@latest --activate && \
     pnpm install --frozen-lockfile --offline && \
-    pnpm prisma generate && \
     pnpm build && \
     pnpm prune --prod
 
