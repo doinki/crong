@@ -13,7 +13,7 @@ export function Pagination({ count, page }: PaginationProps) {
   const isLastPageGroup = start + 4 >= count;
 
   return (
-    <nav className="flex justify-center gap-1 md:gap-2">
+    <nav className="flex justify-center gap-2">
       <Link
         aria-disabled={isFirstPageGroup}
         aria-label={[
