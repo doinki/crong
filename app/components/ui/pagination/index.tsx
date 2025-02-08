@@ -16,7 +16,10 @@ export function Pagination({ count, page }: PaginationProps) {
     <nav className="flex justify-center gap-1 md:gap-2">
       <Link
         aria-disabled={isFirstPageGroup}
-        aria-label={['이전 페이지', !isFirstPageGroup && `${start - 1} 페이지`]
+        aria-label={[
+          '이전 페이지',
+          !isFirstPageGroup && `(${start - 1} 페이지)`,
+        ]
           .filter(Boolean)
           .join('')}
         className={twJoin(
