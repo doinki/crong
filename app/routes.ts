@@ -5,4 +5,5 @@ export default [
   route('pages/:page', 'routes/pages.$page.tsx'),
   route('robots.txt', 'routes/robots.txt.ts'),
   route('sitemap.xml', 'routes/sitemap.xml.ts'),
+  route('rss.xml', 'routes/rss.xml.ts'),
 ] satisfies RouteConfig;
