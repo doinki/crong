@@ -1,6 +1,14 @@
 import { Rss } from 'feedkit';
+import { SeoHandle } from 'react-router-seo';
+import { serverOnly$ } from 'vite-env-only/macros';
 
 import { prisma } from '~/prisma.server';
+
+export const handle: SeoHandle | undefined = serverOnly$({
+  seo: {
+    sitemap: false,
+  },
+});
 
 export async function loader() {
   const posts = await prisma.post.findMany({
@@ -20,16 +28,19 @@ export async function loader() {
       title: post.title,
     })),
     language: 'ko',
-    lastBuildDate: post.createdAt,
+    lastBuildDate: new Date(),
     link: 'https://ije.run',
     pubDate: post.createdAt,
     skipDays: [0, 6],
     title: 'Crong',
-  });
+  }).toString();
 
-  return new Response(rss.toString(), {
+  const bytes = new TextEncoder().encode(rss).byteLength;
+
+  return new Response(rss, {
     headers: {
-      'Content-Type': 'application/rss+xml',
+      'Content-Length': String(bytes),
+      'Content-Type': 'application/rss+xml; charset=utf-8',
     },
   });
 }
