@@ -3,13 +3,59 @@ import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import * as cheerio from 'cheerio';
 import OpenAI from 'openai';
-import { filter, from, map, merge, mergeMap } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  EMPTY,
+  filter,
+  from,
+  map,
+  merge,
+  mergeMap,
+} from 'rxjs';
 
 const client = new PrismaClient();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export function schedule() {
-  merge(toss$(), daangn$(), woowahan$(), kerly$(), naver$(), line$())
+  merge(
+    toss$().pipe(
+      catchError((error) => {
+        console.error(error);
+        return EMPTY;
+      }),
+    ),
+    daangn$().pipe(
+      catchError((error) => {
+        console.error(error);
+        return EMPTY;
+      }),
+    ),
+    woowahan$().pipe(
+      catchError((error) => {
+        console.error(error);
+        return EMPTY;
+      }),
+    ),
+    kerly$().pipe(
+      catchError((error) => {
+        console.error(error);
+        return EMPTY;
+      }),
+    ),
+    naver$().pipe(
+      catchError((error) => {
+        console.error(error);
+        return EMPTY;
+      }),
+    ),
+    line$().pipe(
+      catchError((error) => {
+        console.error(error);
+        return EMPTY;
+      }),
+    ),
+  )
     .pipe(
       mergeMap(async (post) => {
         const response = await openai.chat.completions.create({
@@ -209,7 +255,7 @@ function kerly$() {
         : post,
     ),
     filter(Boolean),
-    mergeMap(async (post) => {
+    concatMap(async (post) => {
       const html = await fetchHtml(post.url);
 
       return {
@@ -256,7 +302,7 @@ function naver$() {
         : post,
     ),
     filter(Boolean),
-    mergeMap(async (post) => {
+    concatMap(async (post) => {
       const content = await fetchJson(
         `https://d2.naver.com/api/v1/contents/${post.id}`,
       ).then((data) => data.postHtml);
@@ -302,7 +348,7 @@ function line$() {
         : post,
     ),
     filter(Boolean),
-    mergeMap(async (post) => {
+    concatMap(async (post) => {
       const content = await fetchJson(
         `https://techblog.lycorp.co.jp/page-data/ko/${post.id}/page-data.json`,
       ).then((data) => data.result.data.blogDetail.content);
@@ -315,8 +361,20 @@ function line$() {
   );
 }
 
+function format(date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+
 async function fetchHtml(url) {
-  const res = await fetch(url);
+  console.log(`[${format(new Date())}] Fetching ${url}`);
+
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:135.0) Gecko/20100101 Firefox/135.0',
+      'X-Forwarded-For': '100.100.100.100',
+    },
+  });
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
   }
@@ -325,7 +383,13 @@ async function fetchHtml(url) {
 }
 
 async function fetchJson(url) {
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:135.0) Gecko/20100101 Firefox/135.0',
+      'X-Forwarded-For': '100.100.100.100',
+    },
+  });
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
   }

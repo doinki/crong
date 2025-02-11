@@ -37,7 +37,7 @@ sourceMapSupport.install({
   },
 });
 
-const job = new CronJob('* */10 * * * *', schedule, null, true, 'Asia/Seoul');
+const job = new CronJob('* */20 * * * *', schedule, null, true, 'Asia/Seoul');
 
 const { PrismaInstrumentation } = prismaInstrumentation;
 
