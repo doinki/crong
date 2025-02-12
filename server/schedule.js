@@ -25,12 +25,12 @@ export function schedule() {
         return EMPTY;
       }),
     ),
-    daangn$().pipe(
-      catchError((error) => {
-        console.error(error);
-        return EMPTY;
-      }),
-    ),
+    // daangn$().pipe(
+    //   catchError((error) => {
+    //     console.error(error);
+    //     return EMPTY;
+    //   }),
+    // ),
     woowahan$().pipe(
       catchError((error) => {
         console.error(error);
@@ -154,41 +154,41 @@ function toss$() {
   );
 }
 
-function daangn$() {
-  return from(fetchHtml('https://medium.com/feed/daangn')).pipe(
-    mergeMap((xml) => cheerio.load(xml, { xml: true })('item').toArray()),
-    map((el) => {
-      const $ = cheerio.load(el, { xml: true });
-      const title = $('title').text().trim();
-      const content = $(String.raw`content\:encoded`)
-        .text()
-        .trim();
-      const url = $('link').text().trim();
-      const publishedAt = $('pubDate').text().trim();
+// function daangn$() {
+//   return from(fetchHtml('https://medium.com/feed/daangn')).pipe(
+//     mergeMap((xml) => cheerio.load(xml, { xml: true })('item').toArray()),
+//     map((el) => {
+//       const $ = cheerio.load(el, { xml: true });
+//       const title = $('title').text().trim();
+//       const content = $(String.raw`content\:encoded`)
+//         .text()
+//         .trim();
+//       const url = $('link').text().trim();
+//       const publishedAt = $('pubDate').text().trim();
 
-      if (!url || !content) {
-        return null;
-      }
+//       if (!url || !content) {
+//         return null;
+//       }
 
-      return {
-        content: getContent(content),
-        publishedAt: new Date(publishedAt),
-        source: '당근',
-        title,
-        url,
-      };
-    }),
-    filter(Boolean),
-    mergeMap(async (post) =>
-      (await client.post.findFirst({
-        where: { url: post.url },
-      }))
-        ? null
-        : post,
-    ),
-    filter(Boolean),
-  );
-}
+//       return {
+//         content: getContent(content),
+//         publishedAt: new Date(publishedAt),
+//         source: '당근',
+//         title,
+//         url,
+//       };
+//     }),
+//     filter(Boolean),
+//     mergeMap(async (post) =>
+//       (await client.post.findFirst({
+//         where: { url: post.url },
+//       }))
+//         ? null
+//         : post,
+//     ),
+//     filter(Boolean),
+//   );
+// }
 
 function woowahan$() {
   return from(fetchHtml('https://techblog.woowahan.com/feed/')).pipe(

@@ -38,7 +38,7 @@ sourceMapSupport.install({
 });
 
 const job = new CronJob(
-  '* */20 8-20 * * 1-5',
+  '0 */20 8-20 * * 1-5',
   schedule,
   null,
   true,
