@@ -49,6 +49,12 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   );
 }
 
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    'Cache-Control': loaderHeaders.get('Cache-Control') ?? '',
+  };
+};
+
 export default function Route({
   loaderData: { count, page, posts },
 }: Route.ComponentProps) {

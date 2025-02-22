@@ -9,4 +9,4 @@ export async function loader(args: Route.LoaderArgs) {
   return postLoader({ ...args, params: { page: '1' } });
 }
 
-export { default } from './pages.$page';
+export { default, headers } from './pages.$page';
