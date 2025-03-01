@@ -37,12 +37,6 @@ export function schedule() {
         return EMPTY;
       }),
     ),
-    kerly$().pipe(
-      catchError((error) => {
-        console.error(error);
-        return EMPTY;
-      }),
-    ),
     naver$().pipe(
       catchError((error) => {
         console.error(error);
@@ -57,6 +51,7 @@ export function schedule() {
     ),
   )
     .pipe(
+      filter((post) => post.publishedAt.getFullYear() >= 2025),
       mergeMap(async (post) => {
         const response = await openai.chat.completions.create({
           messages: [
@@ -223,46 +218,6 @@ function woowahan$() {
         : post,
     ),
     filter(Boolean),
-  );
-}
-
-function kerly$() {
-  return from(fetchHtml('https://helloworld.kurly.com/feed.xml')).pipe(
-    mergeMap((xml) => cheerio.load(xml, { xml: true })('item').toArray()),
-    map((el) => {
-      const $ = cheerio.load(el, { xml: true });
-      const title = $('title').text().trim();
-      const url = $('link').text().trim();
-      const publishedAt = $('pubDate').text().trim();
-
-      if (!url) {
-        return null;
-      }
-
-      return {
-        publishedAt: new Date(publishedAt),
-        source: '컬리',
-        title,
-        url,
-      };
-    }),
-    filter(Boolean),
-    mergeMap(async (post) =>
-      (await client.post.findFirst({
-        where: { url: post.url },
-      }))
-        ? null
-        : post,
-    ),
-    filter(Boolean),
-    concatMap(async (post) => {
-      const html = await fetchHtml(post.url);
-
-      return {
-        ...post,
-        content: getContent(html, 'div.post'),
-      };
-    }),
   );
 }
 
