@@ -13,7 +13,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@fontsource-variable/noto-sans-kr": "^5.1.1",
+    "@fontsource-variable/noto-sans-kr": "^5.2.5",
     "@hono/node-server": "^1.13.8",
     "@mado/hooks": "^0.4.0",
     "@mado/invariant": "^0.1.0",
