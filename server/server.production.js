@@ -9,15 +9,12 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import prismaInstrumentation from '@prisma/instrumentation';
 import { httpIntegration, init, prismaIntegration } from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
-import { CronJob } from 'cron';
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { endTime, startTime, timing } from 'hono/timing';
 import { createRequestHandler } from 'react-router-hono';
 import { gracefulShutdown } from 'server.close';
 import sourceMapSupport from 'source-map-support';
-
-import { schedule } from './schedule.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 process.chdir(join(__dirname, '..'));
@@ -36,14 +33,6 @@ sourceMapSupport.install({
     return null;
   },
 });
-
-const job = new CronJob(
-  '0 */20 8-20 * * 1-5',
-  schedule,
-  null,
-  true,
-  'Asia/Seoul',
-);
 
 const { PrismaInstrumentation } = prismaInstrumentation;
 
@@ -122,8 +111,4 @@ const server = serve(
 
 server.keepAliveTimeout = 65_000;
 
-gracefulShutdown(server, {
-  onShutdown: () => {
-    job.stop();
-  },
-});
+gracefulShutdown(server);

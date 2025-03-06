@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import { PrismaClient } from '@prisma/client';
 import * as cheerio from 'cheerio';
+import { CronJob } from 'cron';
 import OpenAI from 'openai';
 import {
   catchError,
@@ -17,7 +18,22 @@ import {
 const client = new PrismaClient();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export function schedule() {
+const job = new CronJob(
+  '0 */20 8-20 * * 1-5',
+  schedule,
+  null,
+  true,
+  'Asia/Seoul',
+);
+
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.once(signal, () => {
+    job.stop();
+    process.exit(0);
+  });
+}
+
+function schedule() {
   merge(
     toss$().pipe(
       catchError((error) => {
