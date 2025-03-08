@@ -1,9 +1,13 @@
-import { Link } from 'react-router';
+import { href, Link } from 'react-router';
 import { twJoin } from 'tailwind-merge';
 
 export interface PaginationProps {
   count: number;
   page: number;
+}
+
+function getPath(page: number) {
+  return href(`/pages/:page`, { page: String(page) });
 }
 
 export function Pagination({ count, page }: PaginationProps) {
@@ -27,7 +31,7 @@ export function Pagination({ count, page }: PaginationProps) {
           isFirstPageGroup && 'pointer-events-none opacity-16',
         )}
         tabIndex={isFirstPageGroup ? -1 : undefined}
-        to={isFirstPageGroup ? '#' : `/pages/${start - 1}`}
+        to={isFirstPageGroup ? '#' : getPath(start - 1)}
       >
         {'<'}
       </Link>
@@ -48,7 +52,7 @@ export function Pagination({ count, page }: PaginationProps) {
               'inline-flex size-8 items-center justify-center border md:size-10',
               pageNumber === page && 'bg-zinc-200 dark:bg-zinc-700',
             )}
-            to={`/pages/${pageNumber}`}
+            to={getPath(pageNumber)}
           >
             {pageNumber}
           </Link>
@@ -65,7 +69,7 @@ export function Pagination({ count, page }: PaginationProps) {
           isLastPageGroup && 'pointer-events-none opacity-16',
         )}
         tabIndex={isLastPageGroup ? -1 : undefined}
-        to={isLastPageGroup ? '#' : `/pages/${end + 1}`}
+        to={isLastPageGroup ? '#' : getPath(end + 1)}
       >
         {'>'}
       </Link>
